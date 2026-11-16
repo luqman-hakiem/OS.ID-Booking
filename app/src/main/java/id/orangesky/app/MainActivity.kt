@@ -143,7 +143,7 @@ class MainActivity : ComponentActivity() {
             allowFileAccess = false
             allowContentAccess = false
             javaScriptCanOpenWindowsAutomatically = false
-            userAgentString = "$userAgentString OrangeSkyApp/1.1"
+            userAgentString = "$userAgentString OrangeSkyApp/1.2"
         }
         CookieManager.getInstance().apply {
             setAcceptCookie(true)
@@ -178,10 +178,12 @@ class MainActivity : ComponentActivity() {
             // Hentikan indikator lebih awal supaya halaman terasa muncul lebih cepat.
             override fun onPageCommitVisible(view: WebView, url: String?) {
                 refresh.isRefreshing = false
+                hideHeaderMenu(view)
             }
 
             override fun onPageFinished(view: WebView, url: String?) {
                 refresh.isRefreshing = false
+                hideHeaderMenu(view)
                 installScrollWatcher(view)
             }
 
@@ -404,6 +406,11 @@ class MainActivity : ComponentActivity() {
         view.evaluateJavascript(SCROLL_WATCH_JS, null)
     }
 
+    /** Menu header situs dihapus karena navigasi sudah ada di bottom bar app. */
+    private fun hideHeaderMenu(view: WebView) {
+        view.evaluateJavascript(HIDE_HEADER_MENU_JS, null)
+    }
+
     /** Bar hilang saat konten di-scroll ke bawah, muncul lagi saat di-scroll ke atas. */
     private fun setBarVisible(visible: Boolean) {
         if (visible == barVisible) return
@@ -502,6 +509,30 @@ class MainActivity : ComponentActivity() {
                 queued = true;
                 window.requestAnimationFrame(apply);
               }, { passive: true });
+            })();
+        """
+
+        /**
+         * Menu header situs (Home/Voucher/Contact/Currency/Login) disembunyikan karena
+         * bottom navigation app sudah menggantikannya. Hanya menambah satu <style>,
+         * HTML/CSS situs tidak diubah.
+         */
+        private const val HIDE_HEADER_MENU_JS = """
+            (function () {
+              var css = 'nav.navbar{display:none!important;}';
+              function add() {
+                if (document.getElementById('osky-hide-header')) { return; }
+                var style = document.createElement('style');
+                style.id = 'osky-hide-header';
+                style.appendChild(document.createTextNode(css));
+                (document.head || document.documentElement).appendChild(style);
+              }
+              if (document.head) { add(); return; }
+              if (!document.documentElement) { return; }
+              var obs = new MutationObserver(function () {
+                if (document.head) { obs.disconnect(); add(); }
+              });
+              obs.observe(document.documentElement, { childList: true, subtree: true });
             })();
         """
     }
