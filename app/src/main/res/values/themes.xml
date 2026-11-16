@@ -1,0 +1,13 @@
+<resources>
+    <!-- Tema platform, tanpa AppCompat: start lebih cepat & dependensi lebih kecil. -->
+    <style name="Theme.OrangeSky.Base" parent="android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="android:statusBarColor">@color/ic_launcher_background</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <!-- Bilah navigasi putih agar menyatu dengan bottom navigation. -->
+        <item name="android:navigationBarColor">@android:color/white</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+
+    <style name="Theme.OrangeSky" parent="Theme.OrangeSky.Base" />
+</resources>

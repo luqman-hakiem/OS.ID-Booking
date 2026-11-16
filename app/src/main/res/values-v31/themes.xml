@@ -1,0 +1,7 @@
+<resources>
+    <!-- Android 12+: splash bawaan sistem, tanpa library tambahan. -->
+    <style name="Theme.OrangeSky" parent="Theme.OrangeSky.Base">
+        <item name="android:windowSplashScreenBackground">@color/ic_launcher_background</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+    </style>
+</resources>

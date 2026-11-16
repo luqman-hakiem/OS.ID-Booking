@@ -1,0 +1,8 @@
+<resources>
+    <!-- Warna diambil dari ikon/logo orangesky.id (navy + gold). -->
+    <color name="ic_launcher_background">#28293B</color>
+    <color name="brand_gold">#C0A751</color>
+    <!-- Bottom navigation. -->
+    <color name="nav_inactive">#8A8F99</color>
+    <color name="nav_divider">#E4E6EA</color>
+</resources>
