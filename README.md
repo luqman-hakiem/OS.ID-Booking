@@ -4,6 +4,12 @@ Pembungkus WebView untuk https://orangesky.id/ yang dibuat seringan mungkin: tan
 AppCompat, tanpa library splash, APK di-minify R8, dan WebView dioptimalkan supaya
 cold start terasa seperti membuka website langsung di browser.
 
+## Tangkapan layar
+
+<p align="center">
+  <img src="docs/home-orangsky.jpg" width="320" alt="Tangkapan layar Home ORANGESKY.ID">
+</p>
+
 ## Download
 
 Ambil APK terbaru di halaman **Releases**:
