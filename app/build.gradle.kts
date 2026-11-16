@@ -11,8 +11,8 @@ android {
         applicationId = "id.orangesky.app"
         minSdk = 26
         targetSdk = 34
-        versionCode = 9
-        versionName = "1.0"
+        versionCode = 10
+        versionName = "1.1"
     }
 
     // Signing release: diisi lewat environment variable (dipakai GitHub Actions).

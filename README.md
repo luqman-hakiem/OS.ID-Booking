@@ -16,10 +16,10 @@ Ambil APK terbaru di halaman **Releases**:
 
 **https://github.com/luqman-hakiem/orangesky-app/releases/latest**
 
-File: `OrangeSky.id.apk` (Android 8.0 ke atas).
+File: `OrangeSky.id 1.1.apk` (Android 8.0 ke atas).
 
 Download langsung:
-**https://github.com/luqman-hakiem/orangesky-app/releases/latest/download/OrangeSky.id.apk**
+**https://github.com/luqman-hakiem/orangesky-app/releases/latest/download/OrangeSky.id.1.1.apk**
 
 Cara pasang:
 
@@ -64,6 +64,8 @@ App punya **bottom navigation** sendiri di bawah WebView, seperti desain `utama.
 - Tab aktif mengikuti URL (gold `#C0A751`, sisanya abu-abu), jadi tetap benar
   setelah tombol back atau membuka tautan dari dalam situs. My Booking dan Account
   sama-sama membuka area login; app membedakannya lewat parameter `from=mybooking`.
+- Bottom bar otomatis hilang saat konten di-scroll ke bawah dan muncul lagi saat
+  di-scroll ke atas (atau saat halaman kembali ke posisi paling atas).
 - Home ditekan saat sudah di beranda = gulir ke atas (tidak reload).
 - Isi halaman tetap 100% situs orangesky.id; yang ditambahkan app hanya bilah bawah ini.
 

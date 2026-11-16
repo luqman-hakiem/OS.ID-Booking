@@ -18,6 +18,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.webkit.CookieManager
+import android.webkit.JavascriptInterface
 import android.webkit.RenderProcessGoneDetail
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
@@ -59,6 +60,8 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var webView: WebView
     private lateinit var refresh: SwipeRefreshLayout
+    private lateinit var bottomBar: LinearLayout
+    private var barVisible = true
     private var fileCallback: ValueCallback<Array<Uri>>? = null
     private var rendererGone = false
 
@@ -75,7 +78,7 @@ class MainActivity : ComponentActivity() {
             fileCallback = null
         }
 
-    @SuppressLint("SetJavaScriptEnabled")
+    @SuppressLint("SetJavaScriptEnabled", "AddJavascriptInterface")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WebView.setWebContentsDebuggingEnabled(false)
@@ -100,6 +103,7 @@ class MainActivity : ComponentActivity() {
             )
         }
         // WebView mengisi sisa layar, bottom navigation menempel di bawah.
+        bottomBar = buildBottomBar()
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             addView(
@@ -109,7 +113,7 @@ class MainActivity : ComponentActivity() {
                 )
             )
             addView(
-                buildBottomBar(),
+                bottomBar,
                 LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
@@ -139,12 +143,15 @@ class MainActivity : ComponentActivity() {
             allowFileAccess = false
             allowContentAccess = false
             javaScriptCanOpenWindowsAutomatically = false
-            userAgentString = "$userAgentString OrangeSkyApp/1.0"
+            userAgentString = "$userAgentString OrangeSkyApp/1.1"
         }
         CookieManager.getInstance().apply {
             setAcceptCookie(true)
             setAcceptThirdPartyCookies(webView, true)
         }
+
+        // Jembatan kecil JavaScript -> UI: sembunyikan/tampilkan bottom bar saat scroll.
+        webView.addJavascriptInterface(ScrollBridge(), "OrangeSkyNav")
 
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
@@ -164,6 +171,8 @@ class MainActivity : ComponentActivity() {
 
             override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
                 setActiveTab(activeIndex(url))
+                // Halaman baru selalu mulai dengan bar terlihat.
+                setBarVisible(true)
             }
 
             // Hentikan indikator lebih awal supaya halaman terasa muncul lebih cepat.
@@ -173,6 +182,7 @@ class MainActivity : ComponentActivity() {
 
             override fun onPageFinished(view: WebView, url: String?) {
                 refresh.isRefreshing = false
+                installScrollWatcher(view)
             }
 
             override fun onReceivedError(
@@ -374,6 +384,44 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    /**
+     * Jembatan kecil JavaScript -> UI native untuk mengikuti arah scroll halaman.
+     * Isinya hanya show/hide bar, jadi aman dipanggil dari halaman situs.
+     */
+    private inner class ScrollBridge {
+        @JavascriptInterface
+        fun hideBar() {
+            runOnUiThread { setBarVisible(false) }
+        }
+
+        @JavascriptInterface
+        fun showBar() {
+            runOnUiThread { setBarVisible(true) }
+        }
+    }
+
+    private fun installScrollWatcher(view: WebView) {
+        view.evaluateJavascript(SCROLL_WATCH_JS, null)
+    }
+
+    /** Bar hilang saat konten di-scroll ke bawah, muncul lagi saat di-scroll ke atas. */
+    private fun setBarVisible(visible: Boolean) {
+        if (visible == barVisible) return
+        barVisible = visible
+        bottomBar.animate().cancel()
+        if (visible) {
+            if (bottomBar.visibility != View.VISIBLE) {
+                bottomBar.alpha = 0f
+                bottomBar.visibility = View.VISIBLE
+            }
+            bottomBar.animate().alpha(1f).setDuration(140L).start()
+        } else {
+            bottomBar.animate().alpha(0f).setDuration(140L).withEndAction {
+                if (!barVisible) bottomBar.visibility = View.GONE
+            }.start()
+        }
+    }
+
     private fun dp(value: Int): Int =
         (value * resources.displayMetrics.density).roundToInt()
 
@@ -416,5 +464,45 @@ class MainActivity : ComponentActivity() {
             webView.destroy()
         }
         super.onDestroy()
+    }
+
+    companion object {
+        /**
+         * Dipasang setiap halaman selesai dimuat. Hanya membaca arah scroll
+         * (ambang 10 px) lalu memanggil OrangeSkyNav; isi situs tidak diubah.
+         */
+        private const val SCROLL_WATCH_JS = """
+            (function () {
+              if (window.__oskyScrollWatch) { return; }
+              var bridge = window.OrangeSkyNav;
+              if (!bridge) { return; }
+              window.__oskyScrollWatch = true;
+              var lastY = window.pageYOffset || document.documentElement.scrollTop || 0;
+              var hidden = false;
+              var queued = false;
+              function currentY() {
+                return window.pageYOffset || document.documentElement.scrollTop
+                  || document.body.scrollTop || 0;
+              }
+              function apply() {
+                queued = false;
+                var y = currentY();
+                var dy = y - lastY;
+                lastY = y;
+                if (y <= 50) {
+                  if (hidden) { hidden = false; bridge.showBar(); }
+                } else if (dy > 10) {
+                  if (!hidden) { hidden = true; bridge.hideBar(); }
+                } else if (dy < -10) {
+                  if (hidden) { hidden = false; bridge.showBar(); }
+                }
+              }
+              window.addEventListener('scroll', function () {
+                if (queued) { return; }
+                queued = true;
+                window.requestAnimationFrame(apply);
+              }, { passive: true });
+            })();
+        """
     }
 }
