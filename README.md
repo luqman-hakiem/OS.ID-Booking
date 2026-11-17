@@ -16,10 +16,10 @@ Ambil APK terbaru di halaman **Releases**:
 
 **https://github.com/luqman-hakiem/orangesky-app/releases/latest**
 
-File: `OrangeSky.id 1.2.apk` (Android 8.0 ke atas).
+File: `OrangeSky.id 1.3.apk` (Android 8.0 ke atas).
 
 Download langsung:
-**https://github.com/luqman-hakiem/orangesky-app/releases/latest/download/OrangeSky.id.1.2.apk**
+**https://github.com/luqman-hakiem/orangesky-app/releases/latest/download/OrangeSky.id.1.3.apk**
 
 Cara pasang:
 
@@ -68,6 +68,7 @@ App punya **bottom navigation** sendiri di bawah WebView, seperti desain `utama.
   di-scroll ke atas (atau saat halaman kembali ke posisi paling atas).
 - Menu di header situs (Home/Voucher/Contact/Currency/Login) disembunyikan supaya
   tidak dobel dengan bottom bar; navigasi sepenuhnya lewat bottom bar app.
+- Tombol panah ke atas bawaan situs di kanan bawah juga disembunyikan.
 - Home ditekan saat sudah di beranda = gulir ke atas (tidak reload).
 - Isi halaman tetap 100% situs orangesky.id; yang ditambahkan app hanya bilah bawah ini.
 

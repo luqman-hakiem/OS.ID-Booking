@@ -143,7 +143,7 @@ class MainActivity : ComponentActivity() {
             allowFileAccess = false
             allowContentAccess = false
             javaScriptCanOpenWindowsAutomatically = false
-            userAgentString = "$userAgentString OrangeSkyApp/1.2"
+            userAgentString = "$userAgentString OrangeSkyApp/1.3"
         }
         CookieManager.getInstance().apply {
             setAcceptCookie(true)
@@ -513,13 +513,13 @@ class MainActivity : ComponentActivity() {
         """
 
         /**
-         * Menu header situs (Home/Voucher/Contact/Currency/Login) disembunyikan karena
-         * bottom navigation app sudah menggantikannya. Hanya menambah satu <style>,
-         * HTML/CSS situs tidak diubah.
+         * Menu header situs (Home/Voucher/Contact/Currency/Login) dan tombol panah
+         * "back to top" di kanan bawah disembunyikan karena bottom navigation app
+         * sudah menggantikannya. Hanya menambah satu <style>, HTML/CSS situs tidak diubah.
          */
         private const val HIDE_HEADER_MENU_JS = """
             (function () {
-              var css = 'nav.navbar{display:none!important;}';
+              var css = 'nav.navbar{display:none!important;}a.back-to-top{display:none!important;}';
               function add() {
                 if (document.getElementById('osky-hide-header')) { return; }
                 var style = document.createElement('style');
