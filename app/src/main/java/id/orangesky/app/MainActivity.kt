@@ -10,7 +10,6 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Message
-import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.HapticFeedbackConstants
@@ -61,9 +60,9 @@ class MainActivity : ComponentActivity() {
         Tab("Beranda", R.drawable.ic_nav_home, homeUrl),
         Tab("Voucher", R.drawable.ic_nav_voucher, "$homeUrl?menu=voucher"),
         Tab("Bantuan", R.drawable.ic_nav_contact, "$homeUrl?menu=contactUs"),
-        // My Booking ada di dalam area akun; parameter dipakai untuk menandai tab aktif.
-        Tab("Booking", R.drawable.ic_nav_booking, "${homeUrl}login/?from=mybooking"),
-        Tab("Akun", R.drawable.ic_nav_account, "${homeUrl}login/")
+        // Langsung ke My Booking (tab Upcoming aktif); tamu diarahkan ke login oleh situs.
+        Tab("Booking", R.drawable.ic_nav_booking, "$homeUrl?menu=member&t=myBooking"),
+        Tab("Akun", R.drawable.ic_nav_account, "$homeUrl?menu=member")
     )
 
     private lateinit var webView: WebView
@@ -277,7 +276,6 @@ class MainActivity : ComponentActivity() {
             }
 
             override fun onPageFinished(view: WebView, url: String?) {
-                Log.i("OSKYURL", "finished=$url")
                 refresh.isRefreshing = false
                 progress.visibility = View.INVISIBLE
                 injectPageStyle(view)
@@ -474,6 +472,7 @@ class MainActivity : ComponentActivity() {
         if (hostA != hostB) return false
         if (a.path.orEmpty().ifEmpty { "/" } != b.path.orEmpty().ifEmpty { "/" }) return false
         if (a.getQueryParameter("menu") != b.getQueryParameter("menu")) return false
+        if (a.getQueryParameter("t") != b.getQueryParameter("t")) return false
         return a.getQueryParameter("from") == b.getQueryParameter("from")
     }
 
@@ -497,7 +496,9 @@ class MainActivity : ComponentActivity() {
         if (!uri.host.orEmpty().endsWith("orangesky.id")) return activeTab
         val menu = uri.getQueryParameter("menu")
         return when {
-            // My Booking dan Account sama-sama di area /login/, dibedakan lewat parameter.
+            // Booking dan Akun sama-sama area member, dibedakan lewat parameter t.
+            menu == "member" ->
+                if (uri.getQueryParameter("t") == "myBooking") 3 else 4
             uri.path.orEmpty().startsWith("/login") ->
                 if (uri.getQueryParameter("from") == "mybooking") 3 else 4
             menu == "voucher" -> 1
