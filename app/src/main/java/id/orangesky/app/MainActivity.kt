@@ -143,7 +143,7 @@ class MainActivity : ComponentActivity() {
             allowFileAccess = false
             allowContentAccess = false
             javaScriptCanOpenWindowsAutomatically = false
-            userAgentString = "$userAgentString OrangeSkyApp/1.3"
+            userAgentString = "$userAgentString OrangeSkyApp/1.4"
         }
         CookieManager.getInstance().apply {
             setAcceptCookie(true)
