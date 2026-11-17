@@ -46,7 +46,8 @@ Dengan begitu, update dari GitHub maupun Play tetap kompatibel.
 ## 4. Unggah AAB
 
 1. **Test and release → Internal testing → Create new release**.
-2. Unggah `C:\Users\PC Kentang\Documents\Default Project\OrangeSky.id 1.6.aab`.
+2. Unggah `C:\Users\PC Kentang\Documents\Default Project\OrangeSky.id 1.6.aab`
+   (250.901 byte, SHA-256 `DE1F36CE6BA30BFA162934F250F3DE073C2B073B38E9F28DA0756545D053B16F`).
 3. Catatan rilis (contoh):
 
    ```

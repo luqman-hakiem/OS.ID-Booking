@@ -21,6 +21,12 @@ File: `OrangeSky.id 1.6.apk` (Android 8.0 ke atas).
 Download langsung:
 **https://github.com/luqman-hakiem/orangesky-app/releases/latest/download/OrangeSky.id.1.6.apk**
 
+Cek keaslian file (SHA-256, 140.989 byte):
+
+```
+34CAC5BAA9AEC37B625494FE43178EE993D442107BF02F725EE1356B06A8C72F
+```
+
 Cara pasang:
 
 1. Download APK di HP Android.
