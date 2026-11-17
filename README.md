@@ -16,15 +16,15 @@ Ambil APK terbaru di halaman **Releases**:
 
 **https://github.com/luqman-hakiem/orangesky-app/releases/latest**
 
-File: `OrangeSky.id 1.6.3.apk` (Android 8.0 ke atas).
+File: `OrangeSky.id 1.6.4.apk` (Android 8.0 ke atas).
 
 Download langsung:
-**https://github.com/luqman-hakiem/orangesky-app/releases/latest/download/OrangeSky.id.1.6.3.apk**
+**https://github.com/luqman-hakiem/orangesky-app/releases/latest/download/OrangeSky.id.1.6.4.apk**
 
-Cek keaslian file (SHA-256, 142.953 byte):
+Cek keaslian file (SHA-256, 143.109 byte):
 
 ```
-8B10F1EB17DE3B3A7E397DE06F57F85235B97797E953DBE3EBD3741052715885
+623A4F22C8AC0434D924F9BAE5487EE041BCC663C87352A3C94A1EA14D03C6C4
 ```
 
 Cara pasang:
