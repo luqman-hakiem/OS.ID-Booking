@@ -72,10 +72,10 @@ Dengan begitu, update dari GitHub maupun Play tetap kompatibel.
 |---|---|
 | `icon-512.png` | App icon (512×512) |
 | `feature-graphic.jpg` | Feature graphic (1024×500) |
-| `phone-1-home.jpg` | Screenshot HP 1 (1080×2160) |
-| `phone-2-fitur.jpg` | Screenshot HP 2 (1080×1920) |
-| `tablet-7-home.jpg` | Screenshot tablet 7" (1200×1920) |
-| `tablet-10-home.jpg` | Screenshot tablet 10" (1600×2560) |
+| `phone-1-home.jpg` | Screenshot HP 1 - Beranda (1080×2160) |
+| `phone-2-fitur.jpg` | Screenshot HP 2 - Voucher (1080×1920) |
+| `tablet-7-home.jpg` | Screenshot tablet 7" - Beranda (1200×1920) |
+| `tablet-10-home.jpg` | Screenshot tablet 10" - Beranda (1600×2560) |
 | `listing-id.md` | Judul, deskripsi singkat, deskripsi lengkap (ID) |
 | `listing-en.md` | Terjemahan Inggris |
 | `data-safety.md` | Jawaban formulir Data safety |
