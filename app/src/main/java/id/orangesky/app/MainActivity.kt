@@ -10,6 +10,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Message
+import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.HapticFeedbackConstants
@@ -229,7 +230,7 @@ class MainActivity : ComponentActivity() {
             allowFileAccess = false
             allowContentAccess = false
             javaScriptCanOpenWindowsAutomatically = false
-            userAgentString = "$userAgentString OrangeSkyApp/1.6.1"
+            userAgentString = "$userAgentString OrangeSkyApp/1.6.2"
         }
         CookieManager.getInstance().apply {
             setAcceptCookie(true)
@@ -276,6 +277,7 @@ class MainActivity : ComponentActivity() {
             }
 
             override fun onPageFinished(view: WebView, url: String?) {
+                Log.i("OSKYURL", "finished=$url")
                 refresh.isRefreshing = false
                 progress.visibility = View.INVISIBLE
                 injectPageStyle(view)
@@ -762,9 +764,9 @@ class MainActivity : ComponentActivity() {
                 '#osky-voucher-tools{display:flex;gap:8px;margin-bottom:8px;}',
                 '#osky-voucher-search{flex:1;min-width:0;height:40px;border:1px solid #E6E8EE;border-radius:12px;padding:0 12px;font-size:14px;color:#28293B;background:#F7F8FA;outline:none;}',
                 '#osky-voucher-sort{height:40px;border:1px solid #E6E8EE;border-radius:12px;padding:0 8px;font-size:13px;color:#28293B;background:#fff;}',
-                '#osky-voucher-chips{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:6px;-webkit-overflow-scrolling:touch;padding-bottom:2px;scrollbar-width:none;}',
+                '#osky-voucher-chips{display:flex;flex-wrap:nowrap;align-items:center;overflow-x:auto;gap:6px;-webkit-overflow-scrolling:touch;padding-bottom:2px;scrollbar-width:none;}',
                 '#osky-voucher-chips::-webkit-scrollbar{display:none;}',
-                '#osky-voucher-toolbar .filter-btn{border-radius:999px;border:1px solid #E6E8EE;background:#fff;color:#28293B;font-size:13px;line-height:1.2;padding:7px 14px;margin:0;white-space:nowrap;text-decoration:none;display:inline-block;}',
+                '#osky-voucher-toolbar .filter-btn{flex:0 0 auto;border-radius:999px;border:1px solid #E6E8EE;background:#fff;color:#28293B;font-size:13px;line-height:1.2;padding:7px 14px;margin:0;white-space:nowrap;text-decoration:none;display:inline-block;}',
                 '#osky-voucher-toolbar .filter-btn.osky-active{background:#28293B;border-color:#28293B;color:#fff;}',
                 '#osky-voucher-count{font-size:12px;color:#6B7080;margin:6px 0 0;}',
                 '#osky-voucher-more{display:none;width:100%;margin:6px 0 20px;height:46px;border:1px solid #D8C88F;border-radius:12px;background:#fff;color:#8A6D1F;font-weight:600;font-size:14px;}',
@@ -882,7 +884,13 @@ class MainActivity : ComponentActivity() {
                 merchant.textContent = 'Merchant';
                 merchant.className = 'filter-btn';
                 chips.appendChild(merchant);
-                chips.appendChild(filterRow);
+                // Pindahkan tombol filter satu per satu supaya semuanya sejajar dalam
+                // satu baris gulir; kalau wrapper-nya ikut dipindah, chip Merchant
+                // ikut meregang setinggi dua baris dan tampak seperti oval kosong.
+                while (filterRow.firstElementChild) {
+                  chips.appendChild(filterRow.firstElementChild);
+                }
+                if (filterRow.parentNode) { filterRow.parentNode.removeChild(filterRow); }
 
                 var count = document.createElement('p');
                 count.id = 'osky-voucher-count';
