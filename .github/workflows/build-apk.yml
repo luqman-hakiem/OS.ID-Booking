@@ -22,15 +22,19 @@ jobs:
           java-version: 17
       - uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: 8.7
+          gradle-version: 8.13
       - name: Siapkan keystore (opsional)
         if: env.KEYSTORE_BASE64 != ''
         run: echo "$KEYSTORE_BASE64" | base64 -d > "$KEYSTORE_FILE"
-      - name: Build APK
-        run: gradle assembleDebug assembleRelease
+      - name: Build APK + AAB
+        run: gradle assembleDebug assembleRelease bundleRelease
       - uses: actions/upload-artifact@v4
         with:
           name: orangesky-apk
           path: |
             app/build/outputs/apk/debug/*.apk
             app/build/outputs/apk/release/*.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: orangesky-aab
+          path: app/build/outputs/bundle/release/*.aab

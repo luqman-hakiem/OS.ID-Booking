@@ -29,7 +29,11 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import kotlin.math.roundToInt
 
@@ -61,6 +65,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var webView: WebView
     private lateinit var refresh: SwipeRefreshLayout
     private lateinit var bottomBar: LinearLayout
+    private lateinit var statusSpacer: View
     private var barVisible = true
     private var fileCallback: ValueCallback<Array<Uri>>? = null
     private var rendererGone = false
@@ -104,8 +109,18 @@ class MainActivity : ComponentActivity() {
         }
         // WebView mengisi sisa layar, bottom navigation menempel di bawah.
         bottomBar = buildBottomBar()
+        statusSpacer = View(this).apply {
+            setBackgroundColor(getColor(R.color.ic_launcher_background))
+        }
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
+            setBackgroundColor(Color.WHITE)
+            addView(
+                statusSpacer,
+                LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, 0
+                )
+            )
             addView(
                 refresh,
                 LinearLayout.LayoutParams(
@@ -121,6 +136,28 @@ class MainActivity : ComponentActivity() {
             )
         }
         setContentView(root)
+
+        // targetSdk 35+ mewajibkan edge-to-edge: status bar navy dan navigation bar
+        // putih digambar sendiri, ukurannya mengikuti insets perangkat.
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),
+            navigationBarStyle = SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
+        )
+        ViewCompat.setOnApplyWindowInsetsListener(root) { view, insets ->
+            val bars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
+            val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
+            val spacerParams = statusSpacer.layoutParams
+            if (spacerParams.height != bars.top) {
+                spacerParams.height = bars.top
+                statusSpacer.layoutParams = spacerParams
+            }
+            // Kiri/kanan untuk notch saat landscape; bawah untuk keyboard.
+            view.setPadding(bars.left, 0, bars.right, if (ime.bottom > bars.bottom) ime.bottom else 0)
+            bottomBar.setPadding(0, 0, 0, bars.bottom)
+            insets
+        }
         setActiveTab(0)
 
         webView.settings.apply {
@@ -143,7 +180,7 @@ class MainActivity : ComponentActivity() {
             allowFileAccess = false
             allowContentAccess = false
             javaScriptCanOpenWindowsAutomatically = false
-            userAgentString = "$userAgentString OrangeSkyApp/1.4"
+            userAgentString = "$userAgentString OrangeSkyApp/1.5"
         }
         CookieManager.getInstance().apply {
             setAcceptCookie(true)

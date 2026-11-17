@@ -5,14 +5,14 @@ plugins {
 
 android {
     namespace = "id.orangesky.app"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "id.orangesky.app"
         minSdk = 26
-        targetSdk = 34
-        versionCode = 13
-        versionName = "1.4"
+        targetSdk = 36
+        versionCode = 14
+        versionName = "1.5"
     }
 
     // Signing release: diisi lewat environment variable (dipakai GitHub Actions).
@@ -56,4 +56,6 @@ dependencies {
     // Tanpa AppCompat & library splash: start lebih cepat, APK lebih kecil.
     implementation("androidx.activity:activity-ktx:1.9.3")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    // Hanya untuk insets (edge-to-edge wajib di targetSdk 35+).
+    implementation("androidx.core:core-ktx:1.15.0")
 }

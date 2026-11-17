@@ -16,10 +16,10 @@ Ambil APK terbaru di halaman **Releases**:
 
 **https://github.com/luqman-hakiem/orangesky-app/releases/latest**
 
-File: `OrangeSky.id 1.4.apk` (Android 8.0 ke atas).
+File: `OrangeSky.id 1.5.apk` (Android 8.0 ke atas).
 
 Download langsung:
-**https://github.com/luqman-hakiem/orangesky-app/releases/latest/download/OrangeSky.id.1.4.apk**
+**https://github.com/luqman-hakiem/orangesky-app/releases/latest/download/OrangeSky.id.1.5.apk**
 
 Cara pasang:
 
@@ -28,7 +28,7 @@ Cara pasang:
    yang dipakai.
 3. Setelah terpasang, buka **ORANGESKY.ID**.
 
-> Mulai versi 1.4 semua rilis ditandatangani dengan kunci tetap, jadi pembaruan
+> Sejak versi 1.4 semua rilis ditandatangani dengan kunci tetap, jadi pembaruan
 > berikutnya bisa langsung dipasang menimpa versi lama tanpa uninstall. Satu kali
 > uninstall hanya diperlukan kalau di HP masih ada versi 1.3 atau lebih lama.
 
