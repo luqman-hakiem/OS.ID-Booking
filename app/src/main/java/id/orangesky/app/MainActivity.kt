@@ -750,7 +750,7 @@ class MainActivity : ComponentActivity() {
               var css = [
                 'nav.navbar{display:none!important;}',
                 'a.back-to-top{display:none!important;}',
-                'body{padding-bottom:96px!important;}',
+                '.footer{padding-bottom:96px!important;}',
                 '.fixed-bottom{bottom:96px!important;}',
                 '.sticky-bottom{bottom:96px!important;}',
                 '.text-primary{color:#8A6D1F!important;}',
