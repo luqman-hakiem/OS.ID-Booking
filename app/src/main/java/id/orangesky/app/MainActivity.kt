@@ -129,10 +129,32 @@ class MainActivity : ComponentActivity() {
             visibility = View.INVISIBLE
         }
 
-        // WebView mengisi sisa layar, bottom navigation melayang di bawah.
+        // WebView mengisi layar; bottom navigation melayang DI ATAS konten supaya
+        // area di sekitar pill memperlihatkan halaman, bukan pita putih.
         bottomBar = buildBottomBar()
         statusSpacer = View(this).apply {
             setBackgroundColor(getColor(R.color.ic_launcher_background))
+        }
+        val content = FrameLayout(this).apply {
+            addView(
+                refresh,
+                FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.MATCH_PARENT
+                )
+            )
+            addView(
+                bottomBar,
+                FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                    Gravity.BOTTOM
+                ).apply {
+                    leftMargin = dp(12)
+                    rightMargin = dp(12)
+                    bottomMargin = dp(8)
+                }
+            )
         }
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -150,21 +172,10 @@ class MainActivity : ComponentActivity() {
                 )
             )
             addView(
-                refresh,
+                content,
                 LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f
                 )
-            )
-            addView(
-                bottomBar,
-                LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    leftMargin = dp(12)
-                    rightMargin = dp(12)
-                    bottomMargin = dp(8)
-                }
             )
         }
         setContentView(root)
@@ -188,7 +199,7 @@ class MainActivity : ComponentActivity() {
             // Kiri/kanan untuk notch saat landscape; bawah untuk keyboard.
             view.setPadding(bars.left, 0, bars.right, if (ime.bottom > bars.bottom) ime.bottom else 0)
             // Pill bottom bar melayang 8dp di atas navigation bar / keyboard.
-            val barParams = bottomBar.layoutParams as LinearLayout.LayoutParams
+            val barParams = bottomBar.layoutParams as FrameLayout.LayoutParams
             val wanted = bars.bottom + dp(8)
             if (barParams.bottomMargin != wanted) {
                 barParams.bottomMargin = wanted
@@ -218,7 +229,7 @@ class MainActivity : ComponentActivity() {
             allowFileAccess = false
             allowContentAccess = false
             javaScriptCanOpenWindowsAutomatically = false
-            userAgentString = "$userAgentString OrangeSkyApp/1.6"
+            userAgentString = "$userAgentString OrangeSkyApp/1.6.1"
         }
         CookieManager.getInstance().apply {
             setAcceptCookie(true)
@@ -739,6 +750,9 @@ class MainActivity : ComponentActivity() {
               var css = [
                 'nav.navbar{display:none!important;}',
                 'a.back-to-top{display:none!important;}',
+                'body{padding-bottom:96px!important;}',
+                '.fixed-bottom{bottom:96px!important;}',
+                '.sticky-bottom{bottom:96px!important;}',
                 '.text-primary{color:#8A6D1F!important;}',
                 '.btn-outline-primary{color:#8A6D1F!important;border-color:#D8C88F!important;}',
                 '.btn-outline-primary:hover,.btn-outline-primary:focus{background:#8A6D1F!important;border-color:#8A6D1F!important;color:#fff!important;}',
