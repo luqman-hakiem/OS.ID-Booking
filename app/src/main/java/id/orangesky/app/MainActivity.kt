@@ -9,6 +9,8 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.util.TypedValue
 import android.view.Gravity
@@ -70,15 +72,23 @@ class MainActivity : ComponentActivity() {
     private lateinit var bottomBar: LinearLayout
     private lateinit var statusSpacer: View
     private lateinit var progress: ProgressBar
+    private lateinit var loadingCard: LinearLayout
     private var barVisible = true
     private var fileCallback: ValueCallback<Array<Uri>>? = null
     private var rendererGone = false
-    private var fadeStarted = false
+    private var loadingTab = -1
+    private var overlayShown = false
+
+    private val mainHandler = Handler(Looper.getMainLooper())
+
+    /** Indikator tengah hanya muncul kalau halaman memang lambat (>= 300 ms). */
+    private val showLoadingOverlay = Runnable { showOverlay() }
 
     private val tabIcons = ArrayList<ImageView>(tabs.size)
     private val tabLabels = ArrayList<TextView>(tabs.size)
     private val tabItems = ArrayList<LinearLayout>(tabs.size)
     private val tabPills = ArrayList<View>(tabs.size)
+    private val tabSpinners = ArrayList<ProgressBar>(tabs.size)
     private var activeTab = 0
 
     /** Posisi scroll terakhir per tab, dipulihkan saat tab dibuka lagi. */
@@ -122,11 +132,40 @@ class MainActivity : ComponentActivity() {
 
         // Garis progres tipis di bawah status bar: umpan balik saat halaman dimuat.
         progress = ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal).apply {
-            isIndeterminate = true
+            isIndeterminate = false
+            max = 100
             val gold = ColorStateList.valueOf(getColor(R.color.brand_gold_text))
             progressTintList = gold
             indeterminateTintList = gold
             visibility = View.INVISIBLE
+        }
+
+        // Kartu "Memuat" di tengah layar; hanya tampil kalau pemuatan memang lambat.
+        val loadingSpinner = ProgressBar(this).apply {
+            val gold = ColorStateList.valueOf(getColor(R.color.brand_gold_text))
+            indeterminateTintList = gold
+            layoutParams = LinearLayout.LayoutParams(dp(30), dp(30))
+        }
+        val loadingText = TextView(this).apply {
+            text = "Memuat halaman…"
+            textSize = 12f
+            setTextColor(getColor(R.color.nav_inactive))
+            gravity = Gravity.CENTER
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply { topMargin = dp(10) }
+        }
+        loadingCard = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            gravity = Gravity.CENTER
+            setBackgroundResource(R.drawable.bg_loading_card)
+            elevation = dp(6).toFloat()
+            setPadding(dp(24), dp(18), dp(24), dp(18))
+            visibility = View.GONE
+            alpha = 0f
+            addView(loadingSpinner)
+            addView(loadingText)
         }
 
         // WebView mengisi layar; bottom navigation melayang DI ATAS konten supaya
@@ -141,6 +180,14 @@ class MainActivity : ComponentActivity() {
                 FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.MATCH_PARENT,
                     FrameLayout.LayoutParams.MATCH_PARENT
+                )
+            )
+            addView(
+                loadingCard,
+                FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                    Gravity.CENTER
                 )
             )
             addView(
@@ -229,12 +276,14 @@ class MainActivity : ComponentActivity() {
             allowFileAccess = false
             allowContentAccess = false
             javaScriptCanOpenWindowsAutomatically = false
-            userAgentString = "$userAgentString OrangeSkyApp/1.6.2"
+            userAgentString = "$userAgentString OrangeSkyApp/1.6.3"
         }
         CookieManager.getInstance().apply {
             setAcceptCookie(true)
             setAcceptThirdPartyCookies(webView, true)
         }
+        // Jaga proses renderer tetap hidup supaya pindah tab tidak perlu start ulang.
+        webView.setRendererPriorityPolicy(WebView.RENDERER_PRIORITY_IMPORTANT, false)
 
         // Jembatan kecil JavaScript -> UI: sembunyikan/tampilkan bottom bar saat scroll.
         webView.addJavascriptInterface(ScrollBridge(), "OrangeSkyNav")
@@ -256,33 +305,41 @@ class MainActivity : ComponentActivity() {
             }
 
             override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
-                setActiveTab(activeIndex(url))
+                val index = activeIndex(url)
+                setActiveTab(index)
+                setTabLoading(index)
                 // Halaman baru selalu mulai dengan bar terlihat.
                 setBarVisible(true)
+                progress.progress = 5
                 progress.visibility = View.VISIBLE
                 liveScrollY = 0
-                // Konten muncul dengan fade singkat (120 ms), tanpa layar kosong.
-                fadeStarted = false
-                view.animate().cancel()
+                // Indikator tengah menunggu 300 ms supaya halaman cepat tidak berkedip.
+                mainHandler.removeCallbacks(showLoadingOverlay)
+                mainHandler.postDelayed(showLoadingOverlay, 300L)
             }
 
             // Hentikan indikator lebih awal supaya halaman terasa muncul lebih cepat.
             override fun onPageCommitVisible(view: WebView, url: String?) {
                 refresh.isRefreshing = false
                 progress.visibility = View.INVISIBLE
+                clearTabLoading()
+                hideOverlay()
+                // Gaya + penundaan gambar di awal paint: header situs tidak berkedip
+                // dan gambar di bawah layar tidak ikut diunduh.
                 injectPageStyle(view)
-                injectPageEnhancements(view)
-                fadeIn(view)
+                injectImageDefer(view)
             }
 
             override fun onPageFinished(view: WebView, url: String?) {
                 refresh.isRefreshing = false
                 progress.visibility = View.INVISIBLE
+                clearTabLoading()
+                hideOverlay()
                 injectPageStyle(view)
+                injectImageDefer(view)
                 injectPageEnhancements(view)
                 installScrollWatcher(view)
                 restoreScrollIfNeeded(view, url)
-                if (!fadeStarted) view.alpha = 1f
             }
 
             override fun onReceivedError(
@@ -291,6 +348,8 @@ class MainActivity : ComponentActivity() {
                 if (request.isForMainFrame) {
                     refresh.isRefreshing = false
                     progress.visibility = View.INVISIBLE
+                    clearTabLoading()
+                    hideOverlay()
                     view.loadDataWithBaseURL(null, offlineHtml(), "text/html", "UTF-8", null)
                 }
             }
@@ -308,6 +367,10 @@ class MainActivity : ComponentActivity() {
         }
 
         webView.webChromeClient = object : WebChromeClient() {
+            override fun onProgressChanged(view: WebView, newProgress: Int) {
+                if (progress.visibility == View.VISIBLE) progress.progress = newProgress
+            }
+
             override fun onShowFileChooser(
                 view: WebView,
                 callback: ValueCallback<Array<Uri>>,
@@ -418,8 +481,16 @@ class MainActivity : ComponentActivity() {
                 layoutParams = FrameLayout.LayoutParams(dp(24), dp(24), Gravity.CENTER)
                 importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
             }
+            // Spinner kecil di tab yang sedang memuat; ikon disembunyikan sementara.
+            val spinner = ProgressBar(this).apply {
+                indeterminateTintList = ColorStateList.valueOf(getColor(R.color.brand_gold_text))
+                layoutParams = FrameLayout.LayoutParams(dp(20), dp(20), Gravity.CENTER)
+                visibility = View.GONE
+                importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+            }
             iconWrap.addView(pill)
             iconWrap.addView(icon)
+            iconWrap.addView(spinner)
 
             val label = TextView(this).apply {
                 text = tab.label
@@ -442,6 +513,7 @@ class MainActivity : ComponentActivity() {
             tabLabels += label
             tabItems += item
             tabPills += pill
+            tabSpinners += spinner
             bar.addView(item)
         }
         return bar
@@ -461,6 +533,10 @@ class MainActivity : ComponentActivity() {
             return
         }
         pendingRestoreTab = index
+        // Umpan balik instan: spinner di tab yang dituju, indikator tengah bila lambat.
+        setTabLoading(index)
+        mainHandler.removeCallbacks(showLoadingOverlay)
+        mainHandler.postDelayed(showLoadingOverlay, 300L)
         webView.loadUrl(target.url)
     }
 
@@ -593,17 +669,59 @@ class MainActivity : ComponentActivity() {
         view.evaluateJavascript(PAGE_CSS_JS, null)
     }
 
+    /**
+     * Menunda gambar yang jauh di bawah layar. Halaman voucher mengunduh 59 gambar
+     * (~11 MB) sekaligus; dengan ini hanya gambar yang terlihat yang diunduh.
+     */
+    private fun injectImageDefer(view: WebView) {
+        view.evaluateJavascript(DEFER_IMAGES_JS, null)
+    }
+
     /** Perbaikan konten: format harga/tanggal dan perbaikan daftar voucher. */
     private fun injectPageEnhancements(view: WebView) {
         view.evaluateJavascript(PAGE_ENHANCE_JS, null)
     }
 
-    private fun fadeIn(view: WebView) {
-        if (fadeStarted) return
-        fadeStarted = true
-        view.animate().cancel()
-        view.alpha = 0.85f
-        view.animate().alpha(1f).setDuration(120L).start()
+    /** Spinner kecil menggantikan ikon tab yang sedang memuat. */
+    private fun setTabLoading(index: Int) {
+        if (index < 0 || index >= tabSpinners.size) return
+        loadingTab = index
+        tabSpinners.forEachIndexed { i, spinner ->
+            spinner.visibility = if (i == index) View.VISIBLE else View.GONE
+        }
+        tabIcons.forEachIndexed { i, icon ->
+            icon.alpha = if (i == index) 0f else 1f
+        }
+    }
+
+    private fun clearTabLoading() {
+        if (loadingTab < 0) return
+        loadingTab = -1
+        tabSpinners.forEach { it.visibility = View.GONE }
+        tabIcons.forEach { it.alpha = 1f }
+    }
+
+    /** Indikator "Memuat halaman…" hanya ditampilkan bila pemuatan melewati 300 ms. */
+    private fun showOverlay() {
+        if (overlayShown || isFinishing) return
+        overlayShown = true
+        loadingCard.animate().cancel()
+        loadingCard.visibility = View.VISIBLE
+        loadingCard.alpha = 0f
+        loadingCard.animate().alpha(1f).setDuration(120L).start()
+    }
+
+    private fun hideOverlay() {
+        mainHandler.removeCallbacks(showLoadingOverlay)
+        if (!overlayShown) {
+            loadingCard.visibility = View.GONE
+            return
+        }
+        overlayShown = false
+        loadingCard.animate().cancel()
+        loadingCard.animate().alpha(0f).setDuration(120L).withEndAction {
+            if (!overlayShown) loadingCard.visibility = View.GONE
+        }.start()
     }
 
     /** Bar hilang saat konten di-scroll ke bawah, muncul lagi saat di-scroll ke atas. */
@@ -739,6 +857,43 @@ class MainActivity : ComponentActivity() {
                 queued = true;
                 window.requestAnimationFrame(apply);
               }, { passive: true });
+            })();
+        """
+
+        /**
+         * Menunda unduhan gambar yang jauh di bawah layar. Halaman voucher memuat
+         * 59 gambar (~11 MB) sekaligus; dengan ini hanya gambar yang terlihat yang
+         * diunduh. Gambar dipulihkan otomatis saat mendekati layar.
+         */
+        private const val DEFER_IMAGES_JS = """
+            (function () {
+              if (window.__oskyDefer) { return; }
+              if (!document.body) { return; }
+              if (!('IntersectionObserver' in window)) { return; }
+              window.__oskyDefer = true;
+              var limit = (window.innerHeight || 800) * 1.5;
+              function restore(img) {
+                var src = img.getAttribute('data-osky-src');
+                if (!src) { return; }
+                img.removeAttribute('data-osky-src');
+                img.setAttribute('src', src);
+              }
+              var io = new IntersectionObserver(function (entries) {
+                for (var i = 0; i < entries.length; i++) {
+                  if (!entries[i].isIntersecting) { continue; }
+                  restore(entries[i].target);
+                  io.unobserve(entries[i].target);
+                }
+              }, { rootMargin: '1200px 0px' });
+              var imgs = document.querySelectorAll('img[src]');
+              for (var i = 0; i < imgs.length; i++) {
+                var img = imgs[i];
+                if (img.getAttribute('data-osky-src')) { continue; }
+                if (img.getBoundingClientRect().top <= limit) { continue; }
+                img.setAttribute('data-osky-src', img.getAttribute('src'));
+                img.removeAttribute('src');
+                io.observe(img);
+              }
             })();
         """
 
@@ -956,22 +1111,30 @@ class MainActivity : ComponentActivity() {
                 }
 
                 // Judul dipindah ke atas deskripsi, lalu S&K dilipat 2 baris.
+                // Judul dipindah ke atas deskripsi (tulis), lalu ukur semua kotak
+                // dalam satu pass (baca), baru pasang tombol S&K (tulis). Pola
+                // baca-tulis bergantian per kartu memaksa 59x reflow.
                 items.forEach(function (item) {
                   var box = item.querySelector('.description-box');
                   if (!box) { return; }
                   var title = box.querySelector('.card-title');
                   if (title) { box.parentNode.insertBefore(title, box); }
-                  if (box.scrollHeight > box.clientHeight + 8) {
-                    var btn = document.createElement('button');
-                    btn.type = 'button';
-                    btn.className = 'osky-sk';
-                    btn.textContent = 'Lihat S&K';
-                    btn.addEventListener('click', function () {
-                      var open = box.classList.toggle('osky-expanded');
-                      btn.textContent = open ? 'Tutup S&K' : 'Lihat S&K';
-                    });
-                    box.parentNode.insertBefore(btn, box.nextSibling);
-                  }
+                });
+                var folded = [];
+                items.forEach(function (item) {
+                  var box = item.querySelector('.description-box');
+                  if (box && box.scrollHeight > box.clientHeight + 8) { folded.push(box); }
+                });
+                folded.forEach(function (box) {
+                  var btn = document.createElement('button');
+                  btn.type = 'button';
+                  btn.className = 'osky-sk';
+                  btn.textContent = 'Lihat S&K';
+                  btn.addEventListener('click', function () {
+                    var open = box.classList.toggle('osky-expanded');
+                    btn.textContent = open ? 'Tutup S&K' : 'Lihat S&K';
+                  });
+                  box.parentNode.insertBefore(btn, box.nextSibling);
                 });
 
                 items.forEach(function (item, i) { item.dataset.oskyIndex = i; });
