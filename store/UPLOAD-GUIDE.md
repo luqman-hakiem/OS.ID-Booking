@@ -2,8 +2,8 @@
 
 Paket ini sudah memenuhi syarat teknis Play per November 2026:
 
-- **AAB bertanda tangan** (bukan APK) → `OrangeSky.id 1.5.aab`
-- `versionCode` **14**, `versionName` **1.5**
+- **AAB bertanda tangan** (bukan APK) → `OrangeSky.id 1.6.aab`
+- `versionCode` **15**, `versionName` **1.6**
 - `targetSdk` **36** (Android 16) — wajib untuk aplikasi baru sejak 31 Agustus 2026
 - `minSdk` **26** (Android 8.0), hanya izin INTERNET, tanpa iklan/analytics
 - Sudah menangani edge-to-edge Android 15/16 (status bar navy, navigation bar putih)
@@ -27,7 +27,7 @@ Paket ini sudah memenuhi syarat teknis Play per November 2026:
 
 ## 3. App signing — PENTING, pilih kunci yang sudah ada
 
-APK GitHub (1.4, 1.5, seterusnya) ditandatangani dengan `orangesky-release.jks`.
+APK GitHub (1.4, 1.5, 1.6, seterusnya) ditandatangani dengan `orangesky-release.jks`.
 Kalau Play memakai kunci buatan Google, tanda tangannya berbeda dan pengguna
 tidak bisa berpindah antara APK GitHub dan versi Play (muncul "App not installed").
 
@@ -46,12 +46,14 @@ Dengan begitu, update dari GitHub maupun Play tetap kompatibel.
 ## 4. Unggah AAB
 
 1. **Test and release → Internal testing → Create new release**.
-2. Unggah `C:\Users\PC Kentang\Documents\Default Project\OrangeSky.id 1.5.aab`.
+2. Unggah `C:\Users\PC Kentang\Documents\Default Project\OrangeSky.id 1.6.aab`.
 3. Catatan rilis (contoh):
 
    ```
    Rilis pertama di Google Play.
-   - Navigasi bawah: Home, Voucher, Contact Us, My Booking, Account
+   - Navigasi bawah: Beranda, Voucher, Bantuan, Booking, Akun
+   - Bottom bar pill melayang, getar halus, dan posisi scroll tiap tab diingat
+   - Voucher: cari, urutkan, S&K dilipat, muat lebih banyak, akses Merchant
    - Booking hotel dan klaim voucher langsung dari aplikasi
    - Ringan, tanpa iklan, hanya izin internet
    - Perbaikan tampilan edge-to-edge Android 15/16
@@ -87,8 +89,8 @@ https://luqman-hakiem.github.io/orangesky-app/privacy.html
 ## 6. Formulir lain di Play Console
 
 - **Privacy policy:** isi URL di atas.
-- **App access:** jelaskan bahwa Home/Voucher/Contact Us terbuka tanpa login;
-  My Booking/Account butuh akun. Buat akun demo untuk reviewer (lihat
+- **App access:** jelaskan bahwa Beranda/Voucher/Bantuan terbuka tanpa login;
+  Booking/Akun butuh akun. Buat akun demo untuk reviewer (lihat
   `data-safety.md`).
 - **Ads:** No ads.
 - **Content rating:** isi kuesioner IARC; kategori Travel → biasanya **Everyone /

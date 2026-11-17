@@ -16,10 +16,10 @@ Ambil APK terbaru di halaman **Releases**:
 
 **https://github.com/luqman-hakiem/orangesky-app/releases/latest**
 
-File: `OrangeSky.id 1.5.apk` (Android 8.0 ke atas).
+File: `OrangeSky.id 1.6.apk` (Android 8.0 ke atas).
 
 Download langsung:
-**https://github.com/luqman-hakiem/orangesky-app/releases/latest/download/OrangeSky.id.1.5.apk**
+**https://github.com/luqman-hakiem/orangesky-app/releases/latest/download/OrangeSky.id.1.6.apk**
 
 Cara pasang:
 
@@ -54,24 +54,41 @@ App punya **bottom navigation** sendiri di bawah WebView, seperti desain `utama.
 
 | Tab | Tujuan |
 | --- | --- |
-| Home | `https://orangesky.id/` |
+| Beranda | `https://orangesky.id/` |
 | Voucher | `https://orangesky.id/?menu=voucher` |
-| Contact Us | `https://orangesky.id/?menu=contactUs` |
-| My Booking | `https://orangesky.id/login/?from=mybooking` (area akun; daftar booking muncul setelah login) |
-| Account | `https://orangesky.id/login/` |
+| Bantuan | `https://orangesky.id/?menu=contactUs` |
+| Booking | `https://orangesky.id/login/?from=mybooking` (area akun; daftar booking muncul setelah login) |
+| Akun | `https://orangesky.id/login/` |
 
-- Dibuat dari `LinearLayout` + ikon vektor 24dp + label 11sp, tinggi ±55dp, tanpa
-  library navigasi tambahan (tetap ringan, tidak menambah ukuran APK berarti).
-- Tab aktif mengikuti URL (gold `#C0A751`, sisanya abu-abu), jadi tetap benar
-  setelah tombol back atau membuka tautan dari dalam situs. My Booking dan Account
-  sama-sama membuka area login; app membedakannya lewat parameter `from=mybooking`.
+- **Pill melayang**: `LinearLayout` + ikon vektor 24dp + label 11sp, sudut 24dp,
+  margin 12dp, shadow halus, tanpa library navigasi tambahan.
+- Tab aktif mengikuti URL (gold gelap `#8A6D1F` yang kontras 4,9:1 di putih,
+  sisanya abu-abu), dengan pill indikator, animasi 180ms, dan getar halus.
+- Label pendek (Beranda/Voucher/Bantuan/Booking/Akun) supaya tidak berdesakan di
+  layar 360dp maupun saat ukuran font sistem diperbesar.
 - Bottom bar otomatis hilang saat konten di-scroll ke bawah dan muncul lagi saat
-  di-scroll ke atas (atau saat halaman kembali ke posisi paling atas).
+  di-scroll ke atas — hanya di Beranda & Voucher. Di halaman booking/form bar
+  selalu tampil supaya tombol aksi tidak hilang. Ketuk area bawah untuk
+  memunculkannya lagi.
+- Posisi scroll tiap tab diingat; kembali ke Voucher tidak mulai dari atas.
+  Menekan tab yang sedang aktif = gulir ke atas (tidak reload).
 - Menu di header situs (Home/Voucher/Contact/Currency/Login) disembunyikan supaya
   tidak dobel dengan bottom bar; navigasi sepenuhnya lewat bottom bar app.
 - Tombol panah ke atas bawaan situs di kanan bawah juga disembunyikan.
-- Home ditekan saat sudah di beranda = gulir ke atas (tidak reload).
 - Isi halaman tetap 100% situs orangesky.id; yang ditambahkan app hanya bilah bawah ini.
+
+### Perbaikan tampilan halaman (CSS/JS ringan, tanpa ubah backend)
+
+- **Garis progres gold 2dp** di bawah status bar saat halaman dimuat + fade-in 120ms.
+- **Kontras**: teks gold di atas putih memakai `#8A6D1F`; tombol outline ikut disesuaikan.
+- **Harga & tanggal konsisten**: `IDR 690.000` → `Rp690.000`, `09/11/2025` → `9 Nov 2025`.
+- **Voucher**: toolbar cari + urut (Default / Segera berakhir / Nama A-Z), chip
+  kategori lengket dan bisa digeser, S&K dilipat 2 baris dengan tombol buka/tutup,
+  muat lebih banyak per 12 kartu, dan akses **Merchant**.
+- **Footer** diringkas: hanya tautan Merchant yang tersisa karena menu lain sudah
+  ada di bottom bar.
+- **Halaman offline** bernuansa navy + wordmark gold, dengan tombol Coba lagi dan
+  WhatsApp (bukan oranye generik).
 
 ## Ukuran layar, kepadatan, dan font
 
@@ -103,6 +120,34 @@ Build otomatis lewat GitHub Actions (tanpa Android Studio):
 2. Download artifact **orangesky-apk**. Isinya:
    - `release/app-release.apk` — **pakai ini**, sudah di-minify (paling kecil & cepat).
    - `debug/app-debug.apk` — untuk uji coba/debug.
+3. Artifact **orangesky-aab** berisi `app-release.aab` untuk diunggah ke Google Play
+   (lihat `store/UPLOAD-GUIDE.md`).
+
+## App Links (tautan langsung ke app)
+
+Manifest sudah menerima `https://orangesky.id/...` dan `https://www.orangesky.id/...`.
+Supaya Android memverifikasinya (tanpa dialog pilih aplikasi), server harus menyediakan:
+
+```
+https://orangesky.id/.well-known/assetlinks.json
+```
+
+Isinya (ganti `package_name` bila perlu):
+
+```json
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "id.orangesky.app",
+    "sha256_cert_fingerprints": [
+      "DF:BFF1:CB:A5:E6:DA:22:45:07:FD:09:64:3D:97:57:25:24:C5:04:8C:7C:29:B3:F5:CB:D8:3A:3C:08:93:BC"
+    ]
+  }
+}]
+```
+
+Selama berkas itu belum ada, tautan tetap terbuka di browser seperti biasa.
 
 ## APK release bertanda tangan sendiri (untuk dibagikan / Play Store)
 

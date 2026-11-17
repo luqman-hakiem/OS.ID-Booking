@@ -20,12 +20,14 @@ ORANGESKY.ID adalah aplikasi resmi OrangeSky untuk memesan kamar hotel dan mengk
 Aplikasi ini ringan, cepat dibuka, dan dibuat khusus untuk memudahkan tamu OrangeSky:
 
 • Beranda — lihat properti dan penawaran terbaru OrangeSky.
-• Voucher — temukan promo dan voucher yang sedang berlaku.
-• Contact Us — hubungi tim OrangeSky lewat telepon, email, atau WhatsApp.
-• My Booking — buka dan pantau pemesanan Anda.
-• Account — masuk atau kelola akun OrangeSky Anda.
+• Voucher — cari, urutkan, dan klaim promo yang sedang berlaku.
+• Bantuan — hubungi tim OrangeSky lewat telepon, email, atau WhatsApp.
+• Booking — buka dan pantau pemesanan Anda.
+• Akun — masuk atau kelola akun OrangeSky Anda.
 
-Navigasi utama selalu ada di bawah layar, jadi berpindah menu hanya butuh satu ketukan. Halaman bisa ditarik untuk dimuat ulang, diperbesar dengan dua jari, dan teks mengikuti ukuran font di pengaturan HP.
+Navigasi utama berupa pill melayang di bawah layar, jadi berpindah menu hanya butuh satu ketukan. Daftar voucher bisa dicari dan diurutkan, syarat & ketentuan dilipat supaya mudah dipindai, dan tombol "Muat lebih banyak" menjaga halaman tetap ringan. Posisi scroll tiap menu diingat, jadi kembali ke Voucher tidak mulai dari atas.
+
+Halaman bisa ditarik untuk dimuat ulang, diperbesar dengan dua jari, dan teks mengikuti ukuran font di pengaturan HP. Harga tampil konsisten (Rp690.000) dan tanggal memakai format Indonesia (9 Nov 2025).
 
 Aplikasi ini berjalan di Android 8.0 ke atas, tanpa iklan, tanpa pelacakan, dan hanya meminta izin internet.
 

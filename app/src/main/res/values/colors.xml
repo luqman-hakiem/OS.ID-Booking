@@ -2,7 +2,9 @@
     <!-- Warna diambil dari ikon/logo orangesky.id (navy + gold). -->
     <color name="ic_launcher_background">#28293B</color>
     <color name="brand_gold">#C0A751</color>
+    <!-- Gold versi gelap: kontras 4,9:1 di atas putih (teks & ikon aktif). -->
+    <color name="brand_gold_text">#8A6D1F</color>
     <!-- Bottom navigation. -->
-    <color name="nav_inactive">#8A8F99</color>
-    <color name="nav_divider">#E4E6EA</color>
+    <color name="nav_inactive">#7A7F8C</color>
+    <color name="nav_divider">#EBEDF2</color>
 </resources>
