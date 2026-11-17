@@ -16,15 +16,15 @@ Ambil APK terbaru di halaman **Releases**:
 
 **https://github.com/luqman-hakiem/orangesky-app/releases/latest**
 
-File: `OrangeSky.id 1.6.2.apk` (Android 8.0 ke atas).
+File: `OrangeSky.id 1.6.3.apk` (Android 8.0 ke atas).
 
 Download langsung:
-**https://github.com/luqman-hakiem/orangesky-app/releases/latest/download/OrangeSky.id.1.6.2.apk**
+**https://github.com/luqman-hakiem/orangesky-app/releases/latest/download/OrangeSky.id.1.6.3.apk**
 
-Cek keaslian file (SHA-256, 141.201 byte):
+Cek keaslian file (SHA-256, 142.953 byte):
 
 ```
-113484AD429F09FD8667FE2092F2053C31EC8530816596DFFEEC2F2D32749E00
+8B10F1EB17DE3B3A7E397DE06F57F85235B97797E953DBE3EBD3741052715885
 ```
 
 Cara pasang:
@@ -63,8 +63,8 @@ App punya **bottom navigation** sendiri di bawah WebView, seperti desain `utama.
 | Beranda | `https://orangesky.id/` |
 | Voucher | `https://orangesky.id/?menu=voucher` |
 | Bantuan | `https://orangesky.id/?menu=contactUs` |
-| Booking | `https://orangesky.id/login/?from=mybooking` (area akun; daftar booking muncul setelah login) |
-| Akun | `https://orangesky.id/login/` |
+| Booking | `https://orangesky.id/?menu=member&t=myBooking` (My Booking, tab Upcoming) |
+| Akun | `https://orangesky.id/?menu=member` |
 
 - **Pill melayang**: `LinearLayout` + ikon vektor 24dp + label 11sp, sudut 24dp,
   margin 12dp, shadow halus, tanpa library navigasi tambahan.
@@ -85,7 +85,14 @@ App punya **bottom navigation** sendiri di bawah WebView, seperti desain `utama.
 
 ### Perbaikan tampilan halaman (CSS/JS ringan, tanpa ubah backend)
 
-- **Garis progres gold 2dp** di bawah status bar saat halaman dimuat + fade-in 120ms.
+- **Indikator memuat di semua tab**: ikon tab yang dituju berubah jadi spinner,
+  garis progres gold 2dp mengikuti persentase halaman, dan kartu "Memuat halaman…"
+  muncul di tengah layar hanya jika pemuatan melewati 300 ms (halaman cepat tidak
+  berkedip).
+- **Pindah tab lebih ringan**: gambar yang jauh di bawah layar ditunda unduhannya
+  (halaman Voucher mengunduh 59 gambar ±11 MB sekaligus), renderer WebView dijaga
+  tetap hidup, dan perbaikan daftar voucher dijalankan sekali tanpa memicu 59x
+  reflow.
 - **Kontras**: teks gold di atas putih memakai `#8A6D1F`; tombol outline ikut disesuaikan.
 - **Harga & tanggal konsisten**: `IDR 690.000` → `Rp690.000`, `09/11/2025` → `9 Nov 2025`.
 - **Voucher**: toolbar cari + urut (Default / Segera berakhir / Nama A-Z), chip

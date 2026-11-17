@@ -2,8 +2,8 @@
 
 Paket ini sudah memenuhi syarat teknis Play per November 2026:
 
-- **AAB bertanda tangan** (bukan APK) → `OrangeSky.id 1.6.2.aab`
-- `versionCode` **17**, `versionName` **1.6.2**
+- **AAB bertanda tangan** (bukan APK) → `OrangeSky.id 1.6.3.aab`
+- `versionCode` **18**, `versionName` **1.6.3**
 - `targetSdk` **36** (Android 16) — wajib untuk aplikasi baru sejak 31 Agustus 2026
 - `minSdk` **26** (Android 8.0), hanya izin INTERNET, tanpa iklan/analytics
 - Sudah menangani edge-to-edge Android 15/16 (status bar navy, navigation bar putih)
@@ -27,7 +27,7 @@ Paket ini sudah memenuhi syarat teknis Play per November 2026:
 
 ## 3. App signing — PENTING, pilih kunci yang sudah ada
 
-APK GitHub (1.4, 1.5, 1.6, 1.6.1, 1.6.2, seterusnya) ditandatangani dengan `orangesky-release.jks`.
+APK GitHub (1.4, 1.5, 1.6, 1.6.1, 1.6.2, 1.6.3, seterusnya) ditandatangani dengan `orangesky-release.jks`.
 Kalau Play memakai kunci buatan Google, tanda tangannya berbeda dan pengguna
 tidak bisa berpindah antara APK GitHub dan versi Play (muncul "App not installed").
 
@@ -46,8 +46,8 @@ Dengan begitu, update dari GitHub maupun Play tetap kompatibel.
 ## 4. Unggah AAB
 
 1. **Test and release → Internal testing → Create new release**.
-2. Unggah `C:\Users\PC Kentang\Documents\Default Project\OrangeSky.id 1.6.2.aab`
-   (251.243 byte, SHA-256 `CE9D5F56435B71409D2237F4DD460D0243692456ED2723841CDB9DA0D311DBC5`).
+2. Unggah `C:\Users\PC Kentang\Documents\Default Project\OrangeSky.id 1.6.3.aab`
+   (254.198 byte, SHA-256 `C557E129F8AC9C3AC0F331304CA21B028118C9D5993321DB80F9BA97AD4D54C6`).
 3. Catatan rilis (contoh):
 
    ```
@@ -102,11 +102,11 @@ https://luqman-hakiem.github.io/orangesky-app/privacy.html
 - **News app / COVID / government app:** No.
 - **Negara distribusi:** Indonesia (bisa ditambah), harga gratis.
 
-## 7. Update berikutnya (1.6.2, 1.7, …)
+## 7. Update berikutnya (1.6.4, 1.7, …)
 
 1. Ubah `versionCode` dan `versionName` di
    `app/build.gradle.kts` (versionCode **harus selalu naik**).
-2. Ubah UA di `MainActivity.kt` (`OrangeSkyApp/1.6.2`).
+2. Ubah UA di `MainActivity.kt` (`OrangeSkyApp/1.6.3`).
 3. Commit + push → GitHub Actions membangun APK dan AAB.
 4. Unduh artifact **orangesky-aab**, unggah ke Play Console.
 5. Unduh artifact **orangesky-apk**, ganti aset rilis GitHub seperti biasa.
