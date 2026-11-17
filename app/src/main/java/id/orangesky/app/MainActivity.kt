@@ -276,7 +276,7 @@ class MainActivity : ComponentActivity() {
             allowFileAccess = false
             allowContentAccess = false
             javaScriptCanOpenWindowsAutomatically = false
-            userAgentString = "$userAgentString OrangeSkyApp/1.6.3"
+            userAgentString = "$userAgentString OrangeSkyApp/1.6.4"
         }
         CookieManager.getInstance().apply {
             setAcceptCookie(true)
@@ -900,7 +900,8 @@ class MainActivity : ComponentActivity() {
         /**
          * Menu header situs dan tombol panah "back to top" disembunyikan karena
          * bottom navigation app sudah menggantikannya. Sekaligus merapikan kontras
-         * gold, footer, dan kartu voucher. Hanya menambah satu <style>.
+         * gold, footer, kartu voucher, dan kartu reservasi "My Booking" yang
+         * teksnya melewati garis kartu di layar HP. Hanya menambah satu <style>.
          */
         private const val PAGE_CSS_JS = """
             (function () {
@@ -935,7 +936,15 @@ class MainActivity : ComponentActivity() {
                 '.portfolio-item .card-body{padding:12px 14px;}',
                 '.portfolio-item{text-transform:none!important;}',
                 '@media (min-width:700px){.portfolio-item{flex:0 0 50%;max-width:50%;}}',
-                '@media (min-width:1000px){.portfolio-item{flex:0 0 33.3333%;max-width:33.3333%;}}'
+                '@media (min-width:1000px){.portfolio-item{flex:0 0 33.3333%;max-width:33.3333%;}}',
+                '#myTabContent .d-flex.border.rounded.shadow-sm>.flex-grow-1{min-width:0;flex:1 1 0%!important;overflow-wrap:anywhere;}',
+                '#myTabContent .flex-grow-1>.d-flex.justify-content-between{flex-wrap:wrap;gap:2px 10px;}',
+                '#myTabContent .flex-grow-1>.d-flex.justify-content-between>div{min-width:0;}',
+                '#myTabContent .pull-right{margin-left:auto;text-align:right;}',
+                '#myTabContent .d-flex.border.rounded.shadow-sm>.me-3{flex:0 0 auto;}',
+                '#myTabContent .d-flex.border.rounded.shadow-sm>.me-3>div{width:110px!important;height:110px!important;}',
+                '@media (max-width:400px){#myTabContent .d-flex.border.rounded.shadow-sm>.me-3>div{width:96px!important;height:96px!important;}}',
+                '@media (max-width:340px){#myTabContent .d-flex.border.rounded.shadow-sm>.me-3>div{width:80px!important;height:80px!important;}}'
               ].join('');
               function add() {
                 if (document.getElementById('osky-style')) { return; }
