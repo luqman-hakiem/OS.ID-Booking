@@ -7,19 +7,19 @@ cold start terasa seperti membuka website langsung di browser.
 ## Tangkapan layar
 
 <p align="center">
-  <img src="docs/home-orangsky.jpg" width="320" alt="Tangkapan layar Home ORANGESKY.ID">
+  <img src="docs/home-orangsky.jpg" width="320" alt="Tangkapan layar Home OS.ID-Booking">
 </p>
 
 ## Download
 
 Ambil APK terbaru di halaman **Releases**:
 
-**https://github.com/luqman-hakiem/orangesky-app/releases/latest**
+**https://github.com/luqman-hakiem/OS.ID-Booking/releases/latest**
 
 File: `OrangeSky.id 1.6.4.apk` (Android 8.0 ke atas).
 
 Download langsung:
-**https://github.com/luqman-hakiem/orangesky-app/releases/latest/download/OrangeSky.id.1.6.4.apk**
+**https://github.com/luqman-hakiem/OS.ID-Booking/releases/latest/download/OrangeSky.id.1.6.4.apk**
 
 Cek keaslian file (SHA-256, 143.109 byte):
 
@@ -32,7 +32,7 @@ Cara pasang:
 1. Download APK di HP Android.
 2. Buka file APK, lalu izinkan **Install unknown apps** untuk browser/file manager
    yang dipakai.
-3. Setelah terpasang, buka **ORANGESKY.ID**.
+3. Setelah terpasang, buka **OS.ID-Booking**.
 
 > Sejak versi 1.4 semua rilis ditandatangani dengan kunci tetap, jadi pembaruan
 > berikutnya bisa langsung dipasang menimpa versi lama tanpa uninstall. Satu kali
