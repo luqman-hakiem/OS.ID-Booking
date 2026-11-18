@@ -84,7 +84,7 @@ Dengan begitu, update dari GitHub maupun Play tetap kompatibel.
 URL kebijakan privasi yang dipakai di Play Console:
 
 ```
-https://luqman-hakiem.github.io/orangesky-app/privacy.html
+https://luqman-hakiem.github.io/OS.ID-Booking/privacy.html
 ```
 
 ## 6. Formulir lain di Play Console
