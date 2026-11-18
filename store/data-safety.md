@@ -9,7 +9,7 @@ orangesky.id. Cocokkan dengan kebijakan privasi sebelum submit.
 |---|---|
 | Does your app collect or share any of the required user data types? | **Yes** |
 | Is all of the user data collected by your app encrypted in transit? | **Yes** |
-| Do you provide a way for users to request that their data be deleted? | **Yes** → `https://luqman-hakiem.github.io/OS.ID-Booking/privacy.html` (atau email di halaman itu) |
+| Do you provide a way for users to request that their data be deleted? | **Yes** → `https://luqman-hakiem.github.io/osid/privacy.html` (atau email di halaman itu) |
 
 ## Data types
 
