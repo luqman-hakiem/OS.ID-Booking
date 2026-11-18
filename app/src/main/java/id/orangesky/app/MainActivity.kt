@@ -809,7 +809,7 @@ class MainActivity : ComponentActivity() {
           .ghost{border:1px solid #4A4D63;color:#fff}
         </style></head>
         <body><div class="card">
-          <div class="brand">ORANGESKY.ID</div>
+          <div class="brand">OS.ID-Booking</div>
           <h2>Tidak ada koneksi</h2>
           <p>Periksa internet Anda, lalu coba lagi.</p>
           <a class="primary" href="https://orangesky.id/">Coba lagi</a>

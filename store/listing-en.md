@@ -3,7 +3,7 @@
 ## App name (max 30 characters)
 
 ```
-ORANGESKY.ID — Hotel Booking
+OS.ID-Booking — Hotel Booking
 ```
 
 ## Short description (max 80 characters)
@@ -15,7 +15,7 @@ Book OrangeSky hotels and claim vouchers right from your phone. Light and offici
 ## Full description (max 4000 characters)
 
 ```
-ORANGESKY.ID is the official OrangeSky app for booking hotel rooms and claiming vouchers right from your phone.
+OS.ID-Booking is the official OrangeSky app for booking hotel rooms and claiming vouchers right from your phone.
 
 Lightweight, fast to open, and built for OrangeSky guests:
 

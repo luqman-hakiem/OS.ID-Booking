@@ -1,4 +1,4 @@
-# ORANGESKY.ID — APK ringan untuk orangesky.id
+# OS.ID-Booking — APK ringan untuk orangesky.id
 
 Pembungkus WebView untuk https://orangesky.id/ yang dibuat seringan mungkin: tanpa
 AppCompat, tanpa library splash, APK di-minify R8, dan WebView dioptimalkan supaya
