@@ -21,7 +21,7 @@ Paket ini sudah memenuhi syarat teknis Play per November 2026:
 
 ## 2. Buat aplikasi di Play Console
 
-1. **Create app** → nama `OS.ID-Booking — Booking Hotel`, bahasa default
+1. **Create app** → nama `ORANGESKY.ID — Booking Hotel`, bahasa default
    **Indonesia**, jenis **App**, gratis.
 2. Isi deklarasi: bukan game, tidak punya kebijakan privasi khusus anak, dll.
 

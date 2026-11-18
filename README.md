@@ -1,4 +1,4 @@
-# OS.ID-Booking — APK ringan untuk orangesky.id
+# ORANGESKY.ID — APK ringan untuk orangesky.id
 
 Pembungkus WebView untuk https://orangesky.id/ yang dibuat seringan mungkin: tanpa
 AppCompat, tanpa library splash, APK di-minify R8, dan WebView dioptimalkan supaya
@@ -7,7 +7,7 @@ cold start terasa seperti membuka website langsung di browser.
 ## Tangkapan layar
 
 <p align="center">
-  <img src="docs/home-orangsky.jpg" width="320" alt="Tangkapan layar Home OS.ID-Booking">
+  <img src="docs/home-orangsky.jpg" width="320" alt="Tangkapan layar Home ORANGESKY.ID">
 </p>
 
 ## Download
@@ -32,7 +32,7 @@ Cara pasang:
 1. Download APK di HP Android.
 2. Buka file APK, lalu izinkan **Install unknown apps** untuk browser/file manager
    yang dipakai.
-3. Setelah terpasang, buka **OS.ID-Booking**.
+3. Setelah terpasang, buka **ORANGESKY.ID**.
 
 > Sejak versi 1.4 semua rilis ditandatangani dengan kunci tetap, jadi pembaruan
 > berikutnya bisa langsung dipasang menimpa versi lama tanpa uninstall. Satu kali

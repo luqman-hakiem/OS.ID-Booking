@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "OS.ID-Booking"
+rootProject.name = "OrangeSky"
 include(":app")

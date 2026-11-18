@@ -3,7 +3,7 @@
 ## Nama aplikasi (maks. 30 karakter)
 
 ```
-OS.ID-Booking — Booking Hotel
+ORANGESKY.ID — Booking Hotel
 ```
 
 ## Deskripsi singkat (maks. 80 karakter)
@@ -15,7 +15,7 @@ Booking hotel & klaim voucher OrangeSky langsung dari HP. Ringan dan resmi.
 ## Deskripsi lengkap (maks. 4000 karakter)
 
 ```
-OS.ID-Booking adalah aplikasi resmi OrangeSky untuk memesan kamar hotel dan mengklaim voucher langsung dari ponsel Anda.
+ORANGESKY.ID adalah aplikasi resmi OrangeSky untuk memesan kamar hotel dan mengklaim voucher langsung dari ponsel Anda.
 
 Aplikasi ini ringan, cepat dibuka, dan dibuat khusus untuk memudahkan tamu OrangeSky:
 
